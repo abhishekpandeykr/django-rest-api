@@ -1,6 +1,8 @@
 from dataclasses import fields
 from decimal import Decimal
 from rest_framework import serializers
+from django.utils.text import slugify
+
 
 from store.models import Product, Collection
 
@@ -19,3 +21,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_price_with_tax(self, product:Product):
         return product.price_per_unit * Decimal(1.1)
+
+    def create(self, validated_data):
+        product = Product(**validated_data)
+        product.slug = slugify(product.title)
+        product.save()
+        return product
