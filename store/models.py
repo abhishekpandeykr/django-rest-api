@@ -6,7 +6,7 @@ from django.db import models
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
     price_per_unit = models.DecimalField(max_digits=10, decimal_places=2)
     collection = models.ForeignKey('Collection', on_delete=models.CASCADE, null=True, blank=True)
 

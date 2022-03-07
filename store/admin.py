@@ -8,7 +8,7 @@ class CustomProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 class CustomCollectionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'feature_product')
+    list_display = ('title', 'feature_product', 'id')
 
 admin.site.register(Product, CustomProductAdmin)
 admin.site.register(Collection, CustomCollectionAdmin)
