@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product
+from .models import Product, Collection
 
 class CustomProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'price_per_unit', 'slug')
@@ -7,5 +7,9 @@ class CustomProductAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     prepopulated_fields = {'slug': ('title',)}
 
+class CustomCollectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'feature_product')
+
 admin.site.register(Product, CustomProductAdmin)
+admin.site.register(Collection, CustomCollectionAdmin)
 # Register your models here.
