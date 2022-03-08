@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from  rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Product
 from .serializers import ProductSerializer
 
@@ -44,3 +45,27 @@ class ProductList(APIView):
         product_query_set = Product.objects.all()
         serializer = ProductSerializer(product_query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class ProcutListWithGenerics(ListCreateAPIView):
+    def get_queryset(self):
+        return Product.objects.select_related('collection').all()
+    
+    def get_serializer_class(self):
+        return ProductSerializer
+    
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+class ProductDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.select_related('collection').all()
+    serializer_class = ProductSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'pk'
+    def get_serializer_context(self):
+        return {'request': self.request}
