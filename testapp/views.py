@@ -8,11 +8,18 @@ from testapp.serializers import ReviewSerializers
 # Create your views here.
 
 class ProductViewSets(ModelViewSet):
-    queryset = Product.objects.all()
+    # queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
     def get_serializer_context(self):
         return {'request':self.request}
+    
+    def get_queryset(self):
+        queryset = Product.objects.all()
+        collecttion_id = self.request.query_params.get('collection', None)
+        if collecttion_id is not None:
+            queryset = queryset.filter(collection_id=collecttion_id)
+        return queryset
 
 
 class CollectionViewSets(ModelViewSet):
